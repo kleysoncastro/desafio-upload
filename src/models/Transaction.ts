@@ -1,3 +1,5 @@
+import { uuid } from 'uuidv4';
+
 class Transaction {
   id: string;
 
@@ -12,6 +14,14 @@ class Transaction {
   created_at: Date;
 
   updated_at: Date;
+
+  constructor({ title, type, value, category_id }: Omit<Transaction, 'id'>) {
+    this.id = uuid();
+    this.title = title;
+    this.type = type;
+    this.value = value;
+    this.category_id = category_id;
+  }
 }
 
 export default Transaction;
