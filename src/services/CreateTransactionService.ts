@@ -18,7 +18,7 @@ class CreateTransactionService {
     category,
   }: Request): Promise<Transaction> {
     const transactionsRepository = new TransactionsRepository();
-    const transationSaveIndb = await transactionsRepository.createTransaction({
+    const transationSaveIndb = await transactionsRepository.handleTransaction({
       title,
       type,
       value,

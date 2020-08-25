@@ -22,7 +22,7 @@ class TransactionsRepository extends Repository<Transaction> {
     // TODO
   }
 
-  private async HandleTransation({
+  private async createTransaation({
     title,
     type,
     value,
@@ -36,33 +36,43 @@ class TransactionsRepository extends Repository<Transaction> {
       category_id,
     });
 
-    console.log('----------- HandleTransation');
-    console.log(transation);
-
     await getTransation.save(transation);
 
     return transation;
   }
 
-  public async createTransaction({
+  private async createCategory({ category }: Request): Promise<Category> {
+    const getCategory = getRepository(Category);
+    const newCategory = getCategory.create({
+      title: category,
+    });
+    await getCategory.save(newCategory);
+    return newCategory;
+  }
+
+  private async findCategory({
+    category,
+  }: Request): Promise<Category | undefined> {
+    const getCategory = getRepository(Category);
+    const hasCategory = await getCategory.findOne({
+      where: { title: category },
+    });
+
+    return hasCategory;
+  }
+
+  public async handleTransaction({
     title,
     type,
     value,
     category,
   }: Request): Promise<Transaction> {
-    const getCategory = getRepository(Category);
-    const hasCategory = await getCategory.findOne({
-      where: { title: category },
-    });
-    console.log('---------------------');
-    console.log(hasCategory);
+    const hasCategory = await this.findCategory({ category });
+
     if (!hasCategory) {
-      console.log('-------------- if linha 56');
-      const newCategory = getCategory.create({
-        title: category,
-      });
-      await getCategory.save(newCategory);
-      const saveCategory = await this.HandleTransation({
+      const newCategory = await this.createCategory({ category });
+
+      const saveCategory = await this.createTransaation({
         title,
         type,
         value,
@@ -71,7 +81,7 @@ class TransactionsRepository extends Repository<Transaction> {
       return saveCategory;
     }
 
-    const saveCategory = await this.HandleTransation({
+    const saveCategory = await this.createTransaation({
       title,
       type,
       value,
