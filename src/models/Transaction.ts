@@ -9,7 +9,7 @@ import {
 
 import Category from './Category';
 
-@Entity('transaction')
+@Entity('transactions')
 class Transaction {
   @PrimaryGeneratedColumn('uuid')
   id: string;
@@ -20,12 +20,12 @@ class Transaction {
   @Column()
   type: string;
 
-  @Column()
+  @Column('decimal')
   value: number;
 
-  @ManyToOne(() => Category, category => category.transaction, { eager: true })
+  @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
-  category: Category;
+  category: Category; // variavel para referencia
 
   @Column()
   category_id: string;
