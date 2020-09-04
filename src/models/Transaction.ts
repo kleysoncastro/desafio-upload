@@ -20,12 +20,16 @@ class Transaction {
   @Column()
   type: string;
 
-  @Column('decimal')
+  @Column('decimal', { precision: 13, scale: 2 })
   value: number;
 
-  @ManyToOne(() => Category)
+  /*  @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
-  category: Category; // variavel para referencia
+  category: Category; */
+
+  @ManyToOne(() => Category, category => category.transaction, { eager: true })
+  @JoinColumn({ name: 'category_id' })
+  category: Category;
 
   @Column()
   category_id: string;
